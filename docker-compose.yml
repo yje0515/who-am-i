@@ -1,0 +1,20 @@
+services:
+  mariadb:
+    image: mariadb:10.11
+    container_name: whoami-mariadb
+    restart: unless-stopped
+    command:
+      - --default-authentication-plugin=mysql_native_password
+    environment:
+      MARIADB_DATABASE: whoami
+      MARIADB_USER: whoami
+      MARIADB_PASSWORD: whoami1234
+      MARIADB_ROOT_PASSWORD: root1234
+      TZ: Asia/Seoul
+    ports:
+      - "3307:3306"
+    volumes:
+      - whoami_mariadb:/var/lib/mysql
+
+volumes:
+  whoami_mariadb:

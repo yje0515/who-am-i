@@ -7025,6 +7025,20 @@ textarea.form-control-lg {
 
 .d-flex {
   display: flex !important;
+
+  /*!* project 페이지용 *!*/
+  /*flex-direction: column-reverse;*/
+  /*!* index 페이지용 *!*/
+  /*align-items: center;*/
+}
+
+/* 프로젝트 페이지 프로젝트별 css */
+.project-reverse{
+  flex-direction: column-reverse;
+}
+/* 메인페이지 사진 가운데 정렬*/
+.index-center{
+  align-items: center;
 }
 
 .d-inline-flex {

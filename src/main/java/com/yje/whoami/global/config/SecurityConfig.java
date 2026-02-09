@@ -16,16 +16,19 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/actuator/**", "/api/ping","/",
-                                "/css/**",
-                                "/js/**",
-                                "/assets/**",
-                                "/favicon.ico",
-                                "/resume",
-                                "/contact",
-                                "/projects").permitAll()
-                        .anyRequest().denyAll()
+                .authorizeHttpRequests(auth ->
+                        auth.anyRequest().permitAll() /*임시로 모든 페이지 허용*/
+                
+//                auth
+//                        .requestMatchers("/actuator/**", "/api/ping","/",
+//                                "/css/**",
+//                                "/js/**",
+//                                "/assets/**",
+//                                "/favicon.ico",
+//                                "/resume",
+//                                "/contact",
+//                                "/projects").permitAll()
+//                        .anyRequest().denyAll()
                 )
                 // 로그인 페이지로 보내지 말고, 그냥 에러코드로 끝내기
                 .exceptionHandling(ex -> ex

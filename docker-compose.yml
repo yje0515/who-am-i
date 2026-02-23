@@ -8,7 +8,7 @@ services:
     environment:
       MARIADB_DATABASE: whoami
       MARIADB_USER: whoami
-      MARIADB_PASSWORD: whoami1234
+      MARIADB_PASSWORD: whoami1234 # 추후 .env 파일로 분리
       MARIADB_ROOT_PASSWORD: root1234
       TZ: Asia/Seoul
     ports:

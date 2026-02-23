@@ -21,4 +21,21 @@ public class HomeController {
     public String contact(){
         return "/pages/contact";
     }
+    @GetMapping("/feedback")
+    public String feedback(){
+        return "/pages/feedback";
+    }
+
+    @GetMapping("/admin/log")
+    public String log(){
+        return "/pages/admin/log";
+    }
+    @GetMapping("/admin/login")
+    public String login(){
+        return "/pages/admin/login";
+    }
+    @GetMapping("/admin/statistics")
+    public String statistics(){
+        return "/pages/admin/statistics";
+    }
 }

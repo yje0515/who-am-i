@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<th:block layout:fragment="title">Contact : WhoAmI</th:block>
+<head>
+  <meta charset="UTF-8">
+  <!--    <link rel="stylesheet" th:href="@{/css/}">-->
+</head>
+<div layout:fragment="content">
+  <!-- Page content-->
+    <div class="container px-5 my-5">
+
+        <!-- Page Title -->
+        <div class="text-center mb-5">
+            <h1 class="display-5 fw-bolder mb-0">
+                <span class="text-gradient d-inline">Feedback</span>
+            </h1>
+            <div class="text-muted mt-2">솔직한 피드백을 남겨주세요. 성장에 도움이 됩니다!</div>
+        </div>
+
+        <div class="row gx-5 justify-content-center">
+            <div class="col-lg-11 col-xl-9 col-xxl-8">
+
+                <!-- Write Box -->
+                <section class="mb-5">
+                    <div class="card shadow border-0 rounded-4">
+                        <div class="card-body p-4 p-md-5">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <h2 class="text-primary fw-bolder mb-0">피드백 작성</h2>
+                            </div>
+                            <!-- 비동기 fetch 방식으로 할까? -->
+                            <form th:action="@{/feedback}" method="post">
+                                <!-- Title -->
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold" for="title">제목</label>
+                                    <input class="form-control form-control-lg rounded-4"
+                                           id="title"
+                                           name="title"
+                                           maxlength="80"
+                                           placeholder="제목을 입력해주세요."
+                                           required>
+                                    <div class="form-text">최대 80자</div>
+                                </div>
+
+                                <!-- Content -->
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold" for="content">내용</label>
+                                    <textarea class="form-control rounded-4"
+                                              id="content"
+                                              name="content"
+                                              rows="4"
+                                              maxlength="2000"
+                                              placeholder="내용을 입력해주세요. 내용은 관리자만 확인할 수 있습니다."
+                                              required></textarea>
+                                    <div class="form-text">최대 2000자</div>
+                                </div>
+
+                                <div class="d-flex gap-2 justify-content-end">
+                                    <button class="btn btn-outline-secondary rounded-4 px-4" type="reset">초기화</button>
+                                    <button class="btn btn-primary rounded-4 px-4" type="submit">
+                                        <i class="bi bi-send me-2"></i>등록
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Feed List -->
+                <section>
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h2 class="text-secondary fw-bolder mb-0">List</h2>
+
+                        <!-- 검색/필터 (선택) -->
+                        <form class="d-flex gap-2" th:action="@{/board}" method="get">
+                            <input class="form-control rounded-4" type="search" name="q" placeholder="제목 검색" th:value="${param.q}">
+                            <button class="btn btn-outline-primary rounded-4" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- 목록이 비어있을 때 -->
+                    <div class="card shadow border-0 rounded-4 mb-4" th:if="${#lists.isEmpty(posts)}">
+                        <div class="card-body p-5 text-center">
+                            <div class="text-muted">아직 게시글이 없습니다. 첫 피드백을 남겨주세요.</div>
+                        </div>
+                    </div>
+
+                    <!-- Post Item 반복 -->
+                    <div class="card shadow border-0 rounded-4 mb-4"
+                         th:each="post, stat : ${posts}">
+                        <div class="card-body p-4 p-md-5">
+
+                            <!-- header (avatar + title + meta) -->
+                            <div class="d-flex gap-3">
+
+                                <!-- Avatar -->
+                                <div class="flex-shrink-0">
+                                    <div class="rounded-circle bg-light border d-flex align-items-center justify-content-center"
+                                         style="width:48px;height:48px;">
+                                        <i class="bi bi-chat-left-text text-muted"></i>
+                                    </div>
+                                </div>
+
+                                <div class="flex-grow-1">
+
+                                    <!-- Title row -->
+                                    <div class="d-flex align-items-start justify-content-between gap-3">
+                                        <div>
+                                            <!-- 제목: 항상 보임 -->
+                                            <h5 class="fw-bolder mb-1"
+                                                th:text="${post.title}">
+                                                게시글 제목
+                                            </h5>
+
+                                            <!-- 메타: 작성일은 기본 노출, 작성자는 관리자만 -->
+                                            <div class="small text-muted">
+                                                <i class="bi bi-clock me-1"></i>
+                                                <span th:text="${#temporals.format(post.createdAt, 'yyyy.MM.dd HH:mm')}">
+                        2026.02.23 14:10
+                      </span>
+
+                                                <span class="mx-2">·</span>
+
+                                                <span th:if="${isAdmin}">
+                        <i class="bi bi-person-circle me-1"></i>
+                        <span th:text="${post.authorName}">작성자</span>
+                        <span class="text-muted" th:text="'(' + ${post.authorId} + ')'">(@id)</span>
+                      </span>
+
+                                                <span th:unless="${isAdmin}">
+                        <i class="bi bi-shield-lock me-1"></i>
+                        <span>작성자 정보 비공개</span>
+                      </span>
+                                            </div>
+                                        </div>
+
+                                        <!-- 펼치기 버튼: 관리자만 활성 -->
+                                        <div class="text-end">
+                                            <!-- 관리자 -->
+                                            <button class="btn btn-outline-primary rounded-4 px-3"
+                                                    type="button"
+                                                    th:if="${isAdmin}"
+                                                    data-bs-toggle="collapse"
+                                                    th:attr="data-bs-target='#postBody__' + ${post.id},
+                                     aria-controls='postBody__' + ${post.id}">
+                                                <i class="bi bi-chevron-down me-1"></i>열기
+                                            </button>
+
+                                            <!-- 일반: 제목만 보이고 열기는 불가 -->
+                                            <button class="btn btn-outline-secondary rounded-4 px-3"
+                                                    type="button"
+                                                    th:unless="${isAdmin}"
+                                                    disabled
+                                                    title="관리자만 내용을 열람할 수 있습니다">
+                                                <i class="bi bi-lock me-1"></i>잠김
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- body (collapse) : 관리자만 열어볼 수 있도록 collapse 자체를 isAdmin일 때만 렌더링해도 됨 -->
+                                    <div class="collapse mt-3"
+                                         th:if="${isAdmin}"
+                                         th:id="'postBody__' + ${post.id}">
+                                        <div class="bg-light rounded-4 p-4 border">
+                                            <div class="mb-2 fw-semibold text-primary">
+                                                <i class="bi bi-file-text me-1"></i>내용
+                                            </div>
+
+                                            <!-- 줄바꿈 유지 출력 -->
+                                            <div class="text-body"
+                                                 th:utext="${#strings.replace(#strings.escapeXml(post.content), '\n', '<br/>')}">
+                                                게시글 내용
+                                            </div>
+
+                                            <!-- actions (선택) -->
+                                            <div class="d-flex justify-content-end gap-2 mt-4">
+                                                <a class="btn btn-outline-secondary rounded-4 px-3"
+                                                   th:href="@{/board/{id}/edit(id=${post.id})}">
+                                                    <i class="bi bi-pencil me-1"></i>수정
+                                                </a>
+                                                <form th:action="@{/board/{id}/delete(id=${post.id})}" method="post">
+                                                    <button class="btn btn-outline-danger rounded-4 px-3" type="submit">
+                                                        <i class="bi bi-trash me-1"></i>삭제
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </section>
+
+                <div class="pb-4"></div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</html>

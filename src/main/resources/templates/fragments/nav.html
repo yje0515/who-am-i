@@ -3,11 +3,8 @@
 
         <!-- Home -->
         <a class="navbar-brand" th:href="@{/}">
-            <span class="fw-bolder text-primary">Jieun.Dev</span>
+            <span class="fw-bolder text-primary">jieun.site</span>
         </a>
-<!--        <a class="navbar-text" th:href="@{/chat}">-->
-<!--            <span class="fw-bolder text-primary">chat</span>-->
-<!--        </a>-->
         <button class="navbar-toggler" type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent"
@@ -20,6 +17,9 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
                 <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}">Home</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" th:href="@{/projects}">Projects</a>
                 </li>
                 <li class="nav-item">
@@ -28,11 +28,11 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/feedback}">Feedback</a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/contact}">Contact</a>
                 </li>
 
-                <!-- 관리자한테만 보이게 수정@@@-->
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/admin/log}">Log</a>
                 </li>
